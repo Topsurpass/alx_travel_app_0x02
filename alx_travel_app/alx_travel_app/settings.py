@@ -24,6 +24,10 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # Use environment variables
 DEBUG = env.bool('DEBUG', default=True)
 SECRET_KEY = env('SECRET_KEY', default='unsafe-default-secret-key')
+CHAPA_SECRET_KEY = env("CHAPA_SECRET_KEY")
+CHAPA_PUBLIC_KEY = env("CHAPA_PUBLIC_KEY")
+CHAPA_INITIATE_URL = env("CHAPA_INITIATE_URL")
+CHAPA_VERIFY_URL = env("CHAPA_VERIFY_URL")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -33,7 +37,7 @@ SECRET_KEY = env('SECRET_KEY', default='unsafe-default-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 
 # When DEBUG = False, set the Allowed Host
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -48,6 +52,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     'listings',
+    'django_celery_results',
 ]
 
 #Middleware
@@ -81,7 +86,6 @@ TEMPLATES = [
         },
     },
 ]
-
 #Webserver Gateway Interface
 WSGI_APPLICATION = 'alx_travel_app.wsgi.application'
 
@@ -168,6 +172,19 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
 ]
 
-CELERY_BROKER_URL = 'amqp://localhost'
+CELERY_BROKER_URL = 'amqp://localhost'  # RabbitMQ as the message broker
+CELERY_RESULT_BACKEND = 'django-db'  # Use Django database as the result backend
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = env('EMAIL_PORT', default=465)
+EMAIL_USE_TLS = env('EMAIL_USE_TLS', default=False)
+EMAIL_USE_SSL = env('EMAIL_USE_SSL', default=True) 
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')

@@ -68,3 +68,6 @@ alx_travel_app_0x00/
     ```bash
     python manage.py runserver
     ```
+
+### Payment confirmation image
+![Project Screenshot](./payment.png)
